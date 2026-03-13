@@ -1,6 +1,6 @@
 
 
-baza de date :
+Baza de date :
 
 ⁃                carti
 
@@ -12,7 +12,7 @@ baza de date :
 
 ⁃                librarii personale
 
-⁃                functionalitati:
+Functionalitati:
 
 ⁃                import
 
