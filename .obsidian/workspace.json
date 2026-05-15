@@ -55,12 +55,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "BookInventory - sistem de inventar pentru o mica librarie.md",
+                "file": "Impartire iteratii.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "BookInventory - sistem de inventar pentru o mica librarie"
+              "title": "Impartire iteratii"
             }
           }
         ],
@@ -228,6 +228,8 @@
   },
   "active": "14b2925974edf9c4",
   "lastOpenFiles": [
+    "SD-UC-1: Autentificare utilizator.vpp-journal",
+    "BookInventory - sistem de inventar pentru o mica librarie.md",
     "Use cases.md",
     "Diagrama UML.pdf",
     "Impartire iteratii.md",
@@ -235,7 +237,6 @@
     "Cerinte nefunctionale.md",
     "~$partire iteratii - lab2.docx",
     "~$rințe Nefuncționale - lab2.docx",
-    "BookInventory - sistem de inventar pentru o mica librarie.md",
     "~$okInventory - lab1.docx"
   ]
 }

@@ -12,6 +12,8 @@ Iteratia 1:
 
 Iteratia 2:
 
+-       creeare cont
+
 -       adaugare recenzie
 
 -       gestionare cos
