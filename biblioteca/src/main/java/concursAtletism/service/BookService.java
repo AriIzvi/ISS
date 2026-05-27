@@ -1,7 +1,9 @@
 package concursAtletism.service;
 
 import concursAtletism.domain.Book;
+import concursAtletism.domain.Review;
 import concursAtletism.repository.BookRepository;
+
 import java.util.List;
 
 public class BookService {
@@ -45,5 +47,43 @@ public class BookService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Înregistrează recenzia primită din UI în stratul de persistență
+     */
+    public boolean handleRegisterReview(Review review) {
+        // Aici se pot face și alte validări dacă e cazul (ex: nota să fie între 1 și 5)
+        if (review.getRating() < 1 || review.getRating() > 5) {
+            return false;
+        }
+        return bookRepository.saveReview(review);
+    }
+
+    /**
+     * Returnează top 2 recenzii pentru o carte dată
+     */
+    public List<Review> getTop2ReviewsForBook(Long bookId) {
+        if (bookId == null) {
+            return new java.util.ArrayList<>();
+        }
+        return bookRepository.findTop2ReviewsByBookId(bookId);
+    }
+
+    /**
+     * Înregistrează cumpărarea unei liste de cărți (coșul finalizat)
+     */
+    public void registerPurchase(String email, List<Long> bookIds) {
+        for (Long id : bookIds) {
+            bookRepository.savePurchase(email, id);
+        }
+    }
+
+    /**
+     * Preia cărțile cumpărate de un client
+     */
+    public List<Book> getMyLibrary(String email) {
+        if (email == null) return new java.util.ArrayList<>();
+        return bookRepository.findPurchasedBooksByEmail(email);
     }
 }

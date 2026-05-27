@@ -3,6 +3,7 @@ package concursAtletism.UI;
 import concursAtletism.domain.Book;
 import concursAtletism.domain.User;
 import concursAtletism.service.BookService;
+import concursAtletism.service.CartService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,11 +20,13 @@ public class ClientWindow extends JFrame {
     private static final Color MAIN_SAGE_GREEN = new Color(162, 181, 161);
 
     private BookService bookService;
+    private CartService cartService;
     private User currentUser;
     private JPanel resultsPanel;
 
-    public ClientWindow(BookService bookService, User user) {
+    public ClientWindow(BookService bookService,CartService cartService, User user) {
         this.bookService = bookService;
+        this.cartService = cartService;
         this.currentUser = user;
 
         setTitle("Magazin Cărți - " + user.getEmail());
@@ -40,6 +43,7 @@ public class ClientWindow extends JFrame {
         setLayout(new BorderLayout());
 
         // 1. Header
+        // 1. Header principal
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(MAIN_SAGE_GREEN);
         header.setBorder(new EmptyBorder(15, 20, 15, 20));
@@ -53,6 +57,33 @@ public class ClientWindow extends JFrame {
         lblLogo.setForeground(TXT_CHOCOLATE);
         lblLogo.setFont(new Font("SansSerif", Font.BOLD, 20));
         header.add(lblLogo, BorderLayout.CENTER);
+
+        // !!! REPARARE: Creăm un panou suport pentru butoanele din dreapta !!!
+        JPanel rightControlsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        rightControlsPanel.setOpaque(false); // Îi dăm fundal transparent ca să păstreze culoarea header-ului
+
+        // Butonul A: Librăria Mea
+        JButton btnMyLibrary = new RoundedButton("📚 Librăria Mea");
+        btnMyLibrary.setBackground(MAIN_SAGE_GREEN);
+        btnMyLibrary.setForeground(TXT_CHOCOLATE);
+        btnMyLibrary.addActionListener(e -> {
+            LibraryWindow libWindow = new LibraryWindow(this, bookService, currentUser);
+            libWindow.setVisible(true);
+        });
+        rightControlsPanel.add(btnMyLibrary); // Îl punem în panoul mic
+
+        // Butonul B: Coșul meu
+        JButton btnViewCart = new RoundedButton("🛒 Coșul meu");
+        btnViewCart.setBackground(MAIN_SAGE_GREEN);
+        btnViewCart.setForeground(TXT_CHOCOLATE);
+        btnViewCart.addActionListener(e -> {
+            CartWindow cartWindow = new CartWindow(this, cartService, bookService, currentUser);
+            cartWindow.setVisible(true);
+        });
+        rightControlsPanel.add(btnViewCart); // Îl punem tot în panoul mic
+
+        // Adăugăm panoul care conține AMBELE butoane în partea dreaptă a header-ului
+        header.add(rightControlsPanel, BorderLayout.EAST);
 
         add(header, BorderLayout.NORTH);
 
@@ -166,8 +197,10 @@ public class ClientWindow extends JFrame {
         btnDetails.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // Logica din diagrama sd [Show]
+        // În ClientWindow.java, în interiorul metodei createBookCard:
         btnDetails.addActionListener(e -> {
-            BookWindow bookDetails = new BookWindow(book);
+            // Pasăm 'this' ca prim parametru (fereastra ClientWindow curentă)
+            BookWindow bookDetails = new BookWindow(this, book, bookService, cartService, currentUser);
             bookDetails.setVisible(true);
         });
 

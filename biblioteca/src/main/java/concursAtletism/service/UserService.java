@@ -29,4 +29,38 @@ public class UserService {
             return null;
         }
     }
+
+    /**
+     * Interceptează fluxul de înregistrare conform diagramei [Create Account]
+     * Verifică dacă parolele coincid și trimite datele mai departe spre repo.
+     */
+    public String handleRegister(String email, String password, String confirmPassword,
+                                 String fullName, String dob, String address, String phone) {
+
+        // Pasul 7-8: Verificăm dacă parolele coincid
+        if (!password.equals(confirmPassword)) {
+            return "PASSWORDS_DO_NOT_MATCH"; // Pasul 8.1
+        }
+
+        // Aici poți simula pasul de verificare documente dacă vrei ("valid identity documents provided")
+        // În mod normal, într-o aplicație reală, verifici dacă datele sunt valide.
+        boolean validDocuments = true;
+        if (!validDocuments) {
+            return "IDENTITY_DOCUMENTS_MISSING_OR_INVALID"; // Pasul 11
+        }
+
+        // Creăm obiectul User (Implicit dăm rolul de CLIENT celor care se înregistrează)
+        User newUser = new User(null, email, password, concursAtletism.domain.Role.CLIENT, fullName, dob, address, phone);
+
+        // Pasul 9: create new account în repository
+        boolean success = userRepository.save(newUser);
+
+        if (success) {
+            // Pasul 9.1: Aici s-ar trimite mailul de verificare (simulat prin mesaj)
+            System.out.println("Pasul 9.1: Se trimite email de verificare pentru contul: " + email);
+            return "SUCCESS"; // Pasul 9.1.1
+        } else {
+            return "CREATION_FAILED"; // Pasul 10
+        }
+    }
 }

@@ -5,6 +5,7 @@ import concursAtletism.domain.User;
 import concursAtletism.UI.AdminWindow;
 import concursAtletism.UI.ClientWindow;
 import concursAtletism.service.BookService;
+import concursAtletism.service.CartService;
 import concursAtletism.service.UserService;
 
 import javax.swing.*;
@@ -19,11 +20,13 @@ public class LoginWindow extends JFrame {
 
     private UserService userService;
     private BookService bookService; // Avem nevoie de el pentru a-l pasa ferestrelor următoare
+    private CartService cartService;
 
     // Am adăugat BookService în constructor
-    public LoginWindow(UserService userService, BookService bookService) {
+    public LoginWindow(UserService userService, BookService bookService, CartService cartService) {
         this.userService = userService;
         this.bookService = bookService;
+        this.cartService = cartService;
 
         setTitle("Autentificare - Concurs Atletism");
         setSize(500, 400);
@@ -78,7 +81,7 @@ public class LoginWindow extends JFrame {
                 // --- LOGICA DIN DIAGRAMĂ (blocul alt [rol]) ---
                 if (user.getRole() == Role.CLIENT) {
                     // 12: create ClientWindow(user) -> 13: show()
-                    ClientWindow cw = new ClientWindow(bookService, user);
+                    ClientWindow cw = new ClientWindow(bookService, cartService, user);
                     cw.setVisible(true);
                 } else if (user.getRole() == Role.ADMIN) {
                     // 12.1: create AdminWindow(user) -> 13.1: show()
@@ -94,6 +97,32 @@ public class LoginWindow extends JFrame {
         });
 
         mainPanel.add(btnLogin, gbc);
+
+
+        gbc.gridy++;
+        JLabel lblRegisterLink = new JLabel("Nu ai cont? Înregistrează-te", SwingConstants.CENTER);
+        lblRegisterLink.setForeground(TXT_CHOCOLATE);
+        lblRegisterLink.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        lblRegisterLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        lblRegisterLink.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                // Când se dă click, se deschide fereastra de înregistrare
+                RegisterWindow rw = new RegisterWindow(LoginWindow.this, userService);
+                rw.setVisible(true);
+            }
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                // Efect subtil de hover (subliniere)
+                lblRegisterLink.setText("<html><u>Nu ai cont? Înregistrează-te</u></html>");
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                lblRegisterLink.setText("Nu ai cont? Înregistrează-te");
+            }
+        });
+        mainPanel.add(lblRegisterLink, gbc);
         add(mainPanel);
     }
 
